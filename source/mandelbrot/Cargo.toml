@@ -1,0 +1,10 @@
+[package]
+name = "mandelbrot"
+version = "0.2.0"
+authors = ["Jim Blandy <jimb@red-bean.com>"]
+edition = "2018"
+
+[dependencies]
+num = "0.4"
+image = "0.13.0"
+rayon = "1"
