@@ -1,0 +1,3 @@
+[submodule "rust-stuff"]
+	path = rust-stuff
+	url = https://github.com/alexvyber/rust-stuff.git
