@@ -61,4 +61,9 @@ followed immediately by three pound signs ('###'):
 
     let method = b"GET";
     assert_eq!(method, &[b'G', b'E', b'T']);
+
+    let mut s = "Govinda".to_string();
+    let t = s;
+    s = "Siddhartha".to_string(); // nothing is dropped here
+    println!("{}, {}", t, s)
 }
