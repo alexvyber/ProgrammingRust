@@ -116,6 +116,108 @@ followed immediately by three pound signs ('###'):
     use std::rc::Rc;
     // Rust can infer all these types; written out for clarity
     let s: Rc<String> = Rc::new("shirataki".to_string());
-    let t: Rc<String> = s.clone();
-    let u: Rc<String> = s.clone();
+    let _t: Rc<String> = s.clone();
+    let _u: Rc<String> = s.clone();
+
+    use std::collections::HashMap;
+    type Table = HashMap<String, Vec<String>>;
+
+    fn show(table: &Table) {
+        for (artist, works) in table {
+            println!("works by {}:", artist);
+            for work in works {
+                println!(" {}", work);
+            }
+        }
+    }
+
+    fn sort_works(table: &mut Table) {
+        for (_artist, works) in table {
+            works.sort();
+        }
+    }
+
+    let mut table = Table::new();
+
+    table.insert(
+        "Gesualdo".to_string(),
+        vec![
+            "many madrigals".to_string(),
+            "Tenebrae Responsoria".to_string(),
+        ],
+    );
+
+    table.insert(
+        "Caravaggio".to_string(),
+        vec![
+            "The Musicians".to_string(),
+            "The Calling of St. Matthew".to_string(),
+        ],
+    );
+
+    table.insert(
+        "Cellini".to_string(),
+        vec![
+            "Perseus with the head of Medusa".to_string(),
+            "a salt cellar".to_string(),
+        ],
+    );
+
+    show(&table);
+    assert_eq!(table["Gesualdo"][0], "many madrigals");
+    sort_works(&mut table);
+    println!("----------");
+    show(&table);
+
+    struct Anime {
+        name: &'static str,
+        bechdel_pass: bool,
+    }
+
+    let aria = Anime {
+        name: "Aria: The Animation",
+        bechdel_pass: true,
+    };
+
+    let anime_ref = &aria;
+
+    assert_eq!(anime_ref.name, "Aria: The Animation");
+    // Equivalent to the above, but with the dereference written out:
+    assert_eq!((*anime_ref).name, "Aria: The Animation");
+
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+
+    let point = Point { x: 1000, y: 729 };
+    let r: &Point = &point;
+    let rr: &&Point = &r;
+    let rrr: &&&Point = &rr;
+
+    assert_eq!(rrr.y, 729);
+
+    let x = 10;
+    let y = 10;
+    let rx = &x;
+    let ry = &y;
+    let rrx = &rx;
+    let rry = &ry;
+    assert!(rrx <= rry);
+    assert!(rrx == rry);
+
+    assert!(rx == ry); // their referents are equal
+    assert!(!std::ptr::eq(rx, ry)); // but occupy different addresses
+
+    static mut STASH: &i32 = &128;
+
+    fn f(p: &'static i32) {
+        unsafe {
+            STASH = p;
+        }
+    }
+
+    static WORTH_POINTING_AT: i32 = 1000;
+    
+    f(&WORTH_POINTING_AT);
 }
